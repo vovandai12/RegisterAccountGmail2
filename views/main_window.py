@@ -6,6 +6,7 @@ from views.setting_frame import SettingFrame
 from views.bottom_frame import BottomFrame
 from config import LoadConfig
 import config as config
+from bot.bot import Bot
 
 
 class MainWindow:
@@ -24,17 +25,53 @@ class MainWindow:
         center_x = int(screen_width / 2 - self.size[0] / 2)
         center_y = int(screen_height / 2 - self.size[1] / 2)
         self.window.geometry(f"{self.size[0]}x{self.size[1]}+{center_x}+{center_y}")
-        frame_home = HomeFrame(
+        self.frame_home = HomeFrame(
             self.window, width=int(self.size[0] * 0.6), height=self.size[1] - 50
         )
-        frame_setting = SettingFrame(
-            self.window, width=int(self.size[0] * 0.4), height=self.size[1] - 50
+        self.frame_setting = SettingFrame(
+            self.window, self, width=int(self.size[0] * 0.4), height=self.size[1] - 50
         )
-        frame_bottom = BottomFrame(self.window, width=self.size[0], height=50)
+        self.frame_bottom = BottomFrame(self.window, width=self.size[0], height=50)
 
-        frame_home.grid(row=0, column=0, sticky=tk.NSEW)
-        frame_setting.grid(row=0, column=1, sticky=tk.NSEW)
-        frame_bottom.grid(row=1, column=0, columnspan=2, sticky=tk.NSEW)
+        self.frame_home.grid(row=0, column=0, sticky=tk.NSEW)
+        self.frame_setting.grid(row=0, column=1, sticky=tk.NSEW)
+        self.frame_bottom.grid(row=1, column=0, columnspan=2, sticky=tk.NSEW)
+
+        self.bot = None
+
+    def InsertAccount(self, gmail, password, status):
+        self.frame_home.InsertAccount(gmail, password, status)
+
+    def UpdateAccount(self, gmail, password, status, tag):
+        self.frame_home.UpdateAccount(gmail, password, status, tag)
+
+    def UpdateError(self, text):
+        self.frame_bottom.UpdateError(text)
+
+    def UpdateSuccess(self, text):
+        self.frame_bottom.UpdateSuccess(text)
+
+    def start_callback(self):
+        try:
+            self.bot = Bot()
+            self.bot.insert_account_event = self.InsertAccount
+            self.bot.update_account_event = self.UpdateAccount
+            self.bot.update_error_event = self.UpdateError
+            self.bot.update_success_event = self.frame_bottom.UpdateSuccess
+            self.bot.Start()
+            print("start_callback")
+            return
+        except:
+            return
+
+    def stop_callback(self):
+        try:
+            if self.bot is not None:
+                self.bot.Stop()
+            print("stop_callback")
+            return
+        except:
+            return
 
     def run(self):
         self.window.mainloop()

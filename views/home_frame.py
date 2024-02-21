@@ -7,8 +7,8 @@ class HomeFrame(tk.Frame):
     def __init__(self, window, cnf={}, **kwargs):
         tk.Frame.__init__(self, window, **kwargs, bg="white")
         self.tree = self.TreeViewAccount()
-        for i in range(1, 100):
-            self.InsertAccount(f"gmail{i}", f"password{i}", f"status{i}")
+        # for i in range(1, 100):
+        #     self.InsertAccount(f"gmail{i}", f"password{i}", f"status{i}")
 
     def TreeViewAccount(self):
         tree = Treeview(

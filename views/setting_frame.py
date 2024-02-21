@@ -14,8 +14,9 @@ from config import WriteConfig
 
 
 class SettingFrame(tk.Frame):
-    def __init__(self, window, cnf={}, **kwargs):
-        tk.Frame.__init__(self, window, **kwargs, bg="white")
+    def __init__(self, master,window, cnf={}, **kwargs):
+        tk.Frame.__init__(self, master, **kwargs, bg="white")
+        self.window = window
         lb_proxy = self.Lb_proxy()
         lb_otp = self.Lb_otp()
         lb_profile = self.Lb_profile()
@@ -415,6 +416,7 @@ class SettingFrame(tk.Frame):
             compound=tk.LEFT,
             foreground="white",
             bg="green",
+            command=lambda: self.start()
         )
         button_stop = tk.Button(
             self,
@@ -425,8 +427,23 @@ class SettingFrame(tk.Frame):
             compound=tk.LEFT,
             foreground="white",
             bg="red",
+            command=lambda: self.stop()
         )
         return button_start, button_stop
+    
+    def start(self):
+        try:
+            self.window.start_callback()
+            return
+        except:
+            return
+
+    def stop(self):
+        try:
+            self.window.stop_callback()
+            return
+        except:
+            return
 
 
 def creator_text_proxy(attr_name, value):
