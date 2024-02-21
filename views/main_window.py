@@ -1,15 +1,17 @@
-from tkinter import Tk, N, W, S, E, BOTH, PhotoImage
-from tkinter.ttk import Notebook, Frame, Style
+import tkinter as tk
 from tkinter import messagebox
 from file_paths import FilePaths
 from views.home_frame import HomeFrame
 from views.setting_frame import SettingFrame
 from views.bottom_frame import BottomFrame
+from config import LoadConfig
+import config as config
 
 
 class MainWindow:
     def __init__(self):
-        self.window = Tk()
+        config.global_config = LoadConfig()
+        self.window = tk.Tk()
         self.window.config(bg="white")
         self.size = [1200, 600]
         self.window.title(f"Tool tạo tài khoản gmail - Liên hệ telegram @ttruong27758")
@@ -30,9 +32,9 @@ class MainWindow:
         )
         frame_bottom = BottomFrame(self.window, width=self.size[0], height=50)
 
-        frame_home.grid(row=0, column=0, sticky=(N, S, E, W))
-        frame_setting.grid(row=0, column=1, sticky=(N, S, E, W))
-        frame_bottom.grid(row=1, column=0, columnspan=2, sticky=(N, S, E, W))
+        frame_home.grid(row=0, column=0, sticky=tk.NSEW)
+        frame_setting.grid(row=0, column=1, sticky=tk.NSEW)
+        frame_bottom.grid(row=1, column=0, columnspan=2, sticky=tk.NSEW)
 
     def run(self):
         self.window.mainloop()
