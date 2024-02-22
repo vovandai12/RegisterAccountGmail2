@@ -513,9 +513,7 @@ class Bot:
                     )
                 ).click()
                 time.sleep(DELAY)
-                driver.execute_script("window.scrollTo(0, 500)")
-                time.sleep(DELAY)
-                driver.execute_script("window.scrollTo(0, 600)")
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 time.sleep(DELAY)
                 WebDriverWait(driver, WAIT).until(
                     EC.presence_of_element_located(
@@ -525,49 +523,35 @@ class Bot:
                         )
                     )
                 ).click()
-                ServiceBot.saveDataCSV(account)
                 ServiceBot.saveDataTXT(account)
                 totail_success += 1
-                self.update_account_event(
-                    f"{account.username}@gmail.com",
-                    account.password,
-                    f"Luồng {index}: Đã tạo tài khoản thành công",
-                    SUCCESS,
-                )
                 time.sleep(DELAY)
                 check_title = 1
                 while check_title < 30:
                     title = driver.title
-                    if title == f"Hộp thư đến - {account.username}@gmail.com - Gmail":
+                    if (
+                        title == f"Hộp thư đến - {account.username}@gmail.com - Gmail"
+                        or title
+                        == f"Hộp thư đến (1) - {account.username}@gmail.com - Gmail"
+                    ):
                         break
                     check_title += 1
                     time.sleep(2)
                 ####### Bật POP/IMAP
+                self.update_account_event(
+                    f"{account.username}@gmail.com",
+                    account.password,
+                    f"Luồng {index}: Đang bật POP/IMAP",
+                    RUN,
+                )
+                check_imap = True
                 try:
                     time.sleep(DELAY)
                     WebDriverWait(driver, WAIT).until(
                         EC.presence_of_element_located(
                             (
                                 By.XPATH,
-                                "//div[@class='gb_Nc']/svg[@viewBox='0 0 24 24']/path[@d='M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z']",
-                            )
-                        )
-                    ).click()
-                    time.sleep(DELAY)
-                    WebDriverWait(driver, WAIT).until(
-                        EC.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                "//span[contains(text(),'Nhóm phụ trách cộng.')]",
-                            )
-                        )
-                    ).click()
-                    time.sleep(DELAY)
-                    WebDriverWait(driver, WAIT).until(
-                        EC.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                "//div[@class='ar6 T-I-J3 J-J5-Ji']",
+                                "//div[@aria-label='Trình đơn chính']",
                             )
                         )
                     ).click()
@@ -603,7 +587,7 @@ class Bot:
                         EC.presence_of_element_located(
                             (
                                 By.XPATH,
-                                "//a[label(text(),'Bật POP cho tất cả thư')]",
+                                "//input[@type='radio' and @name='bx_pe' and @value='3']",
                             )
                         )
                     ).click()
@@ -612,24 +596,115 @@ class Bot:
                         EC.presence_of_element_located(
                             (
                                 By.XPATH,
-                                "//a[label(text(),'Bật IMAP')]",
+                                "//input[@type='radio' and @name='bx_ie' and @value='1']",
                             )
                         )
                     ).click()
+                    time.sleep(DELAY)
+                    driver.set_window_size(800, 1200)
+                    WebDriverWait(driver, WAIT).until(
+                        EC.presence_of_element_located(
+                            (
+                                By.XPATH,
+                                "//div[@class='nH Tv1JD']//button[@guidedhelpid='save_changes_button']",
+                            )
+                        )
+                    ).click()
+                    time.sleep(DELAY)
+                    driver.set_window_size(800, 600)
+                except:
+                    check_imap = False
+                    pass
+                if check_imap:
+                    self.update_account_event(
+                        f"{account.username}@gmail.com",
+                        account.password,
+                        f"Luồng {index}:Bật POP/IMAP thành công",
+                        RUN,
+                    )
+                    account.imap = "Đã bật"
+                else:
+                    self.update_account_event(
+                        f"{account.username}@gmail.com",
+                        account.password,
+                        f"Luồng {index}:Bật POP/IMAP thất bại",
+                        ERROR,
+                    )
+                    account.imap = "Chưa bật"
+                check_title = 1
+                while check_title < 30:
+                    title = driver.title
+                    if (
+                        title == f"Hộp thư đến - {account.username}@gmail.com - Gmail"
+                        or title
+                        == f"Hộp thư đến (1) - {account.username}@gmail.com - Gmail"
+                    ):
+                        break
+                    check_title += 1
+                    time.sleep(2)
+                ####### Đọc chat ban đầu
+                try:
+                    time.sleep(DELAY)
+                    driver.set_window_size(800, 800)
                     time.sleep(DELAY)
                     WebDriverWait(driver, WAIT).until(
                         EC.presence_of_element_located(
                             (
                                 By.XPATH,
-                                "//button[contains(text(),'Lưu thay đổi')]",
+                                "//span[@email='googlecommunityteam-noreply@google.com']",
+                            )
+                        )
+                    ).click()
+                    time.sleep(random.randint(30, 80) / 10.0)
+                    WebDriverWait(driver, WAIT).until(
+                        EC.presence_of_element_located(
+                            (
+                                By.XPATH,
+                                "//div[@class='ar6 T-I-J3 J-J5-Ji']",
                             )
                         )
                     ).click()
                 except:
+                    time.sleep(DELAY)
+                    driver.set_window_size(800, 600)
+                ####### Gửi thư ngẫu nhiên
+                try:
+                    time.sleep(DELAY)
+                    WebDriverWait(driver, WAIT).until(
+                        EC.presence_of_element_located(
+                            (
+                                By.XPATH,
+                                "//div[@class='T-I T-I-KE L3']",
+                            )
+                        )
+                    ).click()
+                    to_email = "vodai109@gmail.com"
+                    subject_email = "Đây là tiêu đề email"
+                    content = "Đây là nội dung email"
+                    time.sleep(DELAY)
+                    element_to = WebDriverWait(driver, WAIT).until(
+                        EC.presence_of_element_located(
+                            (
+                                By.XPATH,
+                                "//div[@class='nH Hd']//span[@email='googlecommunityteam-noreply@google.com']",
+                            )
+                        )
+                    )
+                    ## <input id=":10q" class="agP aFw" peoplekit-id="BbVjBd" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Tới người nhận" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" placeholder="" size="0" type="text" role="combobox" aria-owns=":10r" aria-controls=":10r">
+                    ## <input name="subjectbox" id=":x4" class="aoT" autocomplete="off" spellcheck="true" tabindex="1" placeholder="Tiêu đề" aria-label="Tiêu đề">
+                    ## <div id=":ye" class="Am aiL Al editable LW-avf tS-tW" hidefocus="true" aria-label="Nội dung thư" g_editable="true" role="textbox" aria-multiline="true" contenteditable="true" tabindex="1" style="direction: ltr; min-height: 256px;" spellcheck="false" aria-owns=":10s" aria-controls=":10s" aria-expanded="false"><br></div>
+                    ## <div id=":kj" class="T-I J-J5-Ji aoO v7 T-I-atl L3" role="button" tabindex="1" data-tooltip="Gửi &#x202A;(Ctrl-Enter)&#x202C;" aria-label="Gửi &#x202A;(Ctrl-Enter)&#x202C;" data-tooltip-delay="800" jslog="32601; u014N:xr6bB,cOuCgd,Kr2w4b; dYFj7e:true; 11:WyIjbXNnLWE6cjcyNjQxMzEzMjczNjc2NjcyMTIiLG51bGwsbnVsbCxudWxsLDEsbnVsbCxbIiN0aHJlYWQtYTpyLTEwNTU4MDkwMjExOTMyMDU3NTYiXSwwLG51bGwsbnVsbCwwLG51bGwsbnVsbCwwXQ..; 4:W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsMCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCwwXQ.." style="user-select: none;">Gửi</div>
+                except:
                     traceback.print_exc()
                     pass
+                self.update_account_event(
+                    f"{account.username}@gmail.com",
+                    account.password,
+                    f"Luồng {index}: Đã tạo tài khoản thành công",
+                    SUCCESS,
+                )
+                ServiceBot.saveDataCSV(account)
                 time.sleep(10)
-
             except Exception as e:
                 traceback.print_exc()
                 if driver is not None:

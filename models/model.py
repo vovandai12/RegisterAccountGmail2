@@ -14,10 +14,12 @@ class Account:
         phone=None,
         idPhone=None,
         proxy=None,
+        imap=None,
     ):
         self.username = username
         self.password = password
         self.recoveryEmail = recoveryEmail
+        self.imap = imap
         self.firstName = firstName
         self.lastName = lastName
         self.birthDay = birthDay
