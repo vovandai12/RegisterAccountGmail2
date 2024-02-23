@@ -17,7 +17,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from fake_useragent import UserAgent
-from selenium_stealth import stealth
 
 totail_error = 0
 totail_success = 0
@@ -138,16 +137,6 @@ class Bot:
                 driver = webdriver.Chrome(
                     service=Service(ChromeDriverManager().install()), options=options
                 )
-                # stealth(
-                #     driver,
-                #     user_agent=user_agent,
-                #     languages=["vi-VN", "vi", "fr-FR", "fr", "en-US", "en"],
-                #     vendor="Google Inc.",
-                #     platform="Win32",
-                #     webgl_vendor="Intel Inc.",
-                #     renderer="Intel Iris OpenGL Engine",
-                #     fix_hairline=True,
-                # )
                 driver.execute_script(
                     "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
                 )
@@ -160,7 +149,7 @@ class Bot:
                 WAIT = random.randint(15, 30)
                 DELAY = random.randint(10, 30) / 10.0
                 ########
-                # driver.get("https://bot.sannysoft.com/")
+                driver.get("https://bot.sannysoft.com/")
                 ##########
                 time.sleep(DELAY)
                 WebDriverWait(driver, WAIT).until(
@@ -365,8 +354,8 @@ class Bot:
                     pass
                 time.sleep(DELAY)
                 check_phone = 1
-                while check_phone <= 9:
-                    if check_phone == 9:
+                while check_phone <= 5:
+                    if check_phone == 5:
                         account.phone = None
                         account.idPhone = None
                         break
@@ -391,7 +380,7 @@ class Bot:
                     self.update_account_event(
                         f"{account.username}@gmail.com",
                         account.password,
-                        f"Luồng {index}: Nhập số điện thoại: {account.phone} và kiểm tra {check_phone} / 8",
+                        f"Luồng {index}: Nhập số điện thoại: {account.phone} và kiểm tra {check_phone} / 4",
                         RUN,
                     )
                     element_phone = WebDriverWait(driver, WAIT).until(
@@ -542,8 +531,6 @@ class Bot:
                 time.sleep(DELAY)
                 check_title = 1
                 while check_title < 30:
-                    if check_title == 10 or check_title == 20:
-                        driver.refresh()
                     title = driver.title
                     if (
                         title == f"Hộp thư đến - {account.username}@gmail.com - Gmail"
@@ -608,8 +595,6 @@ class Bot:
                         )
                     ).click()
                     time.sleep(DELAY)
-                    driver.set_window_size(800, 1200)
-                    time.sleep(DELAY)
                     WebDriverWait(driver, WAIT).until(
                         EC.presence_of_element_located(
                             (
@@ -619,6 +604,7 @@ class Bot:
                         )
                     ).click()
                     time.sleep(DELAY)
+                    driver.set_window_size(800, 1200)
                     WebDriverWait(driver, WAIT).until(
                         EC.presence_of_element_located(
                             (
@@ -659,137 +645,70 @@ class Bot:
                         break
                     check_title += 1
                     time.sleep(2)
-                ####### Cấu hình chung
+                ####### Đọc chat ban đầu
                 try:
-                    driver.get(f"https://myaccount.google.com/security")
+                    time.sleep(DELAY)
+                    driver.set_window_size(800, 800)
                     time.sleep(DELAY)
                     WebDriverWait(driver, WAIT).until(
                         EC.presence_of_element_located(
                             (
                                 By.XPATH,
-                                "//div[contains(text(),'Bảo vệ tài khoản của bạn')]",
+                                "//span[@email='googlecommunityteam-noreply@google.com']",
                             )
                         )
                     ).click()
-                    time.sleep(DELAY)
-                    driver.execute_script(
-                        "window.scrollTo(0, document.body.scrollHeight)"
-                    )
-                    time.sleep(DELAY)
-                    elements = WebDriverWait(driver, WAIT).until(
-                        EC.presence_of_all_elements_located(
-                            (
-                                By.XPATH,
-                                "//div[@class='HLEawd VfPpkd-ksKsZd-XxIAqe']",
-                            )
-                        )
-                    )
-                    for element in elements:
-                        if "Duyệt web an toàn" in element.text:
-                            element.click()
-                            break
-                    time.sleep(DELAY)
+                    time.sleep(random.randint(30, 80) / 10.0)
                     WebDriverWait(driver, WAIT).until(
                         EC.presence_of_element_located(
                             (
                                 By.XPATH,
-                                "//span[contains(text(),'Tiếp tục')]",
+                                "//div[@class='ar6 T-I-J3 J-J5-Ji']",
                             )
                         )
                     ).click()
                     time.sleep(DELAY)
-                    WebDriverWait(driver, WAIT).until(
-                        EC.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                "//span[contains(text(),'Bật')]",
-                            )
-                        )
-                    ).click()
-                    time.sleep(DELAY)
-                    # WebDriverWait(driver, WAIT).until(
-                    #     EC.presence_of_element_located(
-                    #         (
-                    #             By.XPATH,
-                    #             "//div[contains(text(),'Đăng nhập và khôi phục')]",
-                    #         )
-                    #     )
-                    # ).click()
-                    for element in elements:
-                        if "Đăng nhập và khôi phục" in element.text:
-                            element.click()
-                            break
-                    time.sleep(DELAY)
-                    WebDriverWait(driver, WAIT).until(
-                        EC.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                "//button[@aria-label='Thêm email khôi phục']",
-                            )
-                        )
-                    ).click()
-                    time.sleep(DELAY)
-                    element_password = WebDriverWait(driver, WAIT).until(
-                        EC.presence_of_element_located(
-                            (By.XPATH, "//*[@type='password']")
-                        )
-                    )
-                    for char in account.password:
-                        element_password.send_keys(char)
-                        time.sleep(0.1 + 0.1 * random.random())
-                    time.sleep(DELAY)
-                    WebDriverWait(driver, WAIT).until(
-                        EC.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                "//span[contains(text(),'Tiếp theo')]",
-                            )
-                        )
-                    ).click()
-                    time.sleep(DELAY)
-                    element_email = WebDriverWait(driver, WAIT).until(
-                        EC.presence_of_element_located((By.XPATH, "//*[@type='email']"))
-                    )
-                    for char in account.recoveryEmail:
-                        element_email.send_keys(char)
-                        time.sleep(0.1 + 0.1 * random.random())
-                    time.sleep(DELAY)
-                    WebDriverWait(driver, WAIT).until(
-                        EC.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                "//span[contains(text(),'Tiếp theo')]",
-                            )
-                        )
-                    ).click()
-                    time.sleep(DELAY)
-                    WebDriverWait(driver, WAIT).until(
-                        EC.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                "//a[contains(text(),'Xác minh sau')]",
-                            )
-                        )
-                    ).click()
-                    time.sleep(DELAY)
-                    WebDriverWait(driver, WAIT).until(
-                        EC.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                "//span[contains(text(),'Xong')]",
-                            )
-                        )
-                    ).click()
+                    driver.set_window_size(800, 600)
                 except:
-                    traceback.print_exc()
-                    pass
-                ServiceBot.saveDataCSV(account)
+                    time.sleep(DELAY)
+                    driver.set_window_size(800, 600)
+                ####### Gửi thư ngẫu nhiên
+                # try:
+                #     time.sleep(DELAY)
+                #     WebDriverWait(driver, WAIT).until(
+                #         EC.presence_of_element_located(
+                #             (
+                #                 By.XPATH,
+                #                 "//div[@class='T-I T-I-KE L3']",
+                #             )
+                #         )
+                #     ).click()
+                #     to_email = "vodai109@gmail.com"
+                #     subject_email = "Đây là tiêu đề email"
+                #     content = "Đây là nội dung email"
+                #     time.sleep(DELAY)
+                #     element_to = WebDriverWait(driver, WAIT).until(
+                #         EC.presence_of_element_located(
+                #             (
+                #                 By.XPATH,
+                #                 "//div[@class='nH Hd']//span[@email='googlecommunityteam-noreply@google.com']",
+                #             )
+                #         )
+                #     )
+                ## <input id=":10q" class="agP aFw" peoplekit-id="BbVjBd" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Tới người nhận" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" placeholder="" size="0" type="text" role="combobox" aria-owns=":10r" aria-controls=":10r">
+                ## <input name="subjectbox" id=":x4" class="aoT" autocomplete="off" spellcheck="true" tabindex="1" placeholder="Tiêu đề" aria-label="Tiêu đề">
+                ## <div id=":ye" class="Am aiL Al editable LW-avf tS-tW" hidefocus="true" aria-label="Nội dung thư" g_editable="true" role="textbox" aria-multiline="true" contenteditable="true" tabindex="1" style="direction: ltr; min-height: 256px;" spellcheck="false" aria-owns=":10s" aria-controls=":10s" aria-expanded="false"><br></div>
+                ## <div id=":kj" class="T-I J-J5-Ji aoO v7 T-I-atl L3" role="button" tabindex="1" data-tooltip="Gửi &#x202A;(Ctrl-Enter)&#x202C;" aria-label="Gửi &#x202A;(Ctrl-Enter)&#x202C;" data-tooltip-delay="800" jslog="32601; u014N:xr6bB,cOuCgd,Kr2w4b; dYFj7e:true; 11:WyIjbXNnLWE6cjcyNjQxMzEzMjczNjc2NjcyMTIiLG51bGwsbnVsbCxudWxsLDEsbnVsbCxbIiN0aHJlYWQtYTpyLTEwNTU4MDkwMjExOTMyMDU3NTYiXSwwLG51bGwsbnVsbCwwLG51bGwsbnVsbCwwXQ..; 4:W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsMCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCwwXQ.." style="user-select: none;">Gửi</div>
+                # except:
+                #     traceback.print_exc()
+                #     pass
                 self.update_account_event(
                     f"{account.username}@gmail.com",
                     account.password,
                     f"Luồng {index}: Đã tạo tài khoản thành công",
                     SUCCESS,
                 )
+                ServiceBot.saveDataCSV(account)
                 time.sleep(10)
             except Exception as e:
                 traceback.print_exc()
@@ -809,137 +728,3 @@ class Bot:
             if totail_success >= number_acc:
                 self.stop_event.set()
                 break
-
-
-####### Đọc chat ban đầu
-# try:
-#     time.sleep(DELAY)
-#     driver.set_window_size(800, 800)
-#     time.sleep(DELAY)
-#     WebDriverWait(driver, WAIT).until(
-#         EC.presence_of_element_located(
-#             (
-#                 By.XPATH,
-#                 "//span[@email='googlecommunityteam-noreply@google.com']",
-#             )
-#         )
-#     ).click()
-#     time.sleep(random.randint(30, 80) / 10.0)
-#     WebDriverWait(driver, WAIT).until(
-#         EC.presence_of_element_located(
-#             (
-#                 By.XPATH,
-#                 "//div[@class='ar6 T-I-J3 J-J5-Ji']",
-#             )
-#         )
-#     ).click()
-#     time.sleep(DELAY)
-#     driver.set_window_size(800, 600)
-# except:
-#     time.sleep(DELAY)
-#     driver.set_window_size(800, 600)
-####### Gửi thư ngẫu nhiên
-# try:
-#     time.sleep(DELAY)
-#     WebDriverWait(driver, WAIT).until(
-#         EC.presence_of_element_located(
-#             (
-#                 By.XPATH,
-#                 "//div[@class='T-I T-I-KE L3']",
-#             )
-#         )
-#     ).click()
-#     to_email = "vodai109@gmail.com"
-#     subject_email = "Đây là tiêu đề email"
-#     content = "Đây là nội dung email"
-#     time.sleep(DELAY)
-#     element_to = WebDriverWait(driver, WAIT).until(
-#         EC.presence_of_element_located(
-#             (
-#                 By.XPATH,
-#                 "//div[@class='nH Hd']//span[@email='googlecommunityteam-noreply@google.com']",
-#             )
-#         )
-#     )
-## <input id=":10q" class="agP aFw" peoplekit-id="BbVjBd" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Tới người nhận" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" placeholder="" size="0" type="text" role="combobox" aria-owns=":10r" aria-controls=":10r">
-## <input name="subjectbox" id=":x4" class="aoT" autocomplete="off" spellcheck="true" tabindex="1" placeholder="Tiêu đề" aria-label="Tiêu đề">
-## <div id=":ye" class="Am aiL Al editable LW-avf tS-tW" hidefocus="true" aria-label="Nội dung thư" g_editable="true" role="textbox" aria-multiline="true" contenteditable="true" tabindex="1" style="direction: ltr; min-height: 256px;" spellcheck="false" aria-owns=":10s" aria-controls=":10s" aria-expanded="false"><br></div>
-## <div id=":kj" class="T-I J-J5-Ji aoO v7 T-I-atl L3" role="button" tabindex="1" data-tooltip="Gửi &#x202A;(Ctrl-Enter)&#x202C;" aria-label="Gửi &#x202A;(Ctrl-Enter)&#x202C;" data-tooltip-delay="800" jslog="32601; u014N:xr6bB,cOuCgd,Kr2w4b; dYFj7e:true; 11:WyIjbXNnLWE6cjcyNjQxMzEzMjczNjc2NjcyMTIiLG51bGwsbnVsbCxudWxsLDEsbnVsbCxbIiN0aHJlYWQtYTpyLTEwNTU4MDkwMjExOTMyMDU3NTYiXSwwLG51bGwsbnVsbCwwLG51bGwsbnVsbCwwXQ..; 4:W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsMCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCwwXQ.." style="user-select: none;">Gửi</div>
-# except:
-#     traceback.print_exc()
-#     pass
-####### Tạo kênh youtube
-# check_youtube = False
-# try:
-#     driver.get("https://www.youtube.com")
-#     check_error = None
-#     try:
-#         check_error = WebDriverWait(driver, 5).until(
-#             EC.presence_of_element_located(
-#                 (
-#                     By.XPATH,
-#                     "//div[@class='Đã xảy ra lỗi trong khi cố gắng tạo tài khoản YouTube, vui lòng thử lại sau.']",
-#                 )
-#             )
-#         )
-#     except:
-#         pass
-#     if check_error is None:
-#         check_title = 1
-#         while check_title < 30:
-#             title = driver.title
-#             if title == f"Youtube":
-#                 break
-#             check_title += 1
-#             time.sleep(2)
-#         time.sleep(DELAY)
-#         WebDriverWait(driver, WAIT).until(
-#             EC.presence_of_element_located(
-#                 (
-#                     By.XPATH,
-#                     "//button[@id='avatar-btn']",
-#                 )
-#             )
-#         ).click()
-#         time.sleep(DELAY)
-#         WebDriverWait(driver, WAIT).until(
-#             EC.presence_of_element_located(
-#                 (
-#                     By.XPATH,
-#                     "//a[contains(text(),'Tạo kênh')]",
-#                 )
-#             )
-#         ).click()
-#         time.sleep(DELAY)
-#         WebDriverWait(driver, WAIT).until(
-#             EC.presence_of_element_located(
-#                 (
-#                     By.XPATH,
-#                     "//button[@class='yt-spec-button-shape-next yt-spec-button-shape-next--tonal yt-spec-button-shape-next--mono yt-spec-button-shape-next--size-m']",
-#                 )
-#             )
-#         ).click()
-#         ####### chờ 10s tải lại trang
-#         title = driver.title
-#         current_url = driver.current_url
-#         print(title)
-#         print(current_url)
-#         check_youtube = True
-# except:
-#     traceback.print_exc()
-#     check_youtube = False
-#     pass
-# if check_youtube:
-#     self.update_account_event(
-#         f"{account.username}@gmail.com",
-#         account.password,
-#         f"Luồng {index}:Tạo kênh youtube thành công",
-#         RUN,
-#     )
-# else:
-#     self.update_account_event(
-#         f"{account.username}@gmail.com",
-#         account.password,
-#         f"Luồng {index}:Tạo kênh youtube thất bại",
-#         ERROR,
-#     )
