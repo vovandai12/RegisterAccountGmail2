@@ -14,20 +14,21 @@ from config import WriteConfig
 
 
 class SettingFrame(tk.Frame):
-    def __init__(self, master,window, cnf={}, **kwargs):
+    def __init__(self, master, window, cnf={}, **kwargs):
         tk.Frame.__init__(self, master, **kwargs, bg="white")
         self.window = window
         lb_proxy = self.Lb_proxy()
         lb_otp = self.Lb_otp()
         lb_profile = self.Lb_profile()
         lb_system = self.Lb_system()
-        button_start, button_stop = self.Bt_action()
+        button_start, button_stop, button_format = self.Bt_action()
         lb_proxy.grid(row=0, column=0, padx=(5), pady=(5), sticky=tk.NSEW)
         lb_otp.grid(row=1, column=0, padx=(5), pady=(5), sticky=tk.NSEW)
         lb_profile.grid(row=2, column=0, padx=(5), pady=(5), sticky=tk.NSEW)
         lb_system.grid(row=3, column=0, padx=(5), pady=(5), sticky=tk.NSEW)
         button_start.grid(row=4, column=0, padx=5, pady=5, sticky=tk.N + tk.W)
         button_stop.grid(row=4, column=0, padx=130, pady=5, sticky=tk.N + tk.W)
+        button_format.grid(row=4, column=0, padx=260, pady=5, sticky=tk.N + tk.W)
 
     def Lb_proxy(self):
         lb = tk.LabelFrame(self, text="Proxy", bg="white")
@@ -416,7 +417,7 @@ class SettingFrame(tk.Frame):
             compound=tk.LEFT,
             foreground="white",
             bg="green",
-            command=lambda: self.start()
+            command=lambda: self.start(),
         )
         button_stop = tk.Button(
             self,
@@ -427,10 +428,21 @@ class SettingFrame(tk.Frame):
             compound=tk.LEFT,
             foreground="white",
             bg="red",
-            command=lambda: self.stop()
+            command=lambda: self.stop(),
         )
-        return button_start, button_stop
-    
+        button_format = tk.Button(
+            self,
+            cursor="hand2",
+            text="GMAIL",
+            width=15,
+            height=3,
+            compound=tk.LEFT,
+            foreground="black",
+            bg="white",
+            command=lambda: self.gmail(),
+        )
+        return button_start, button_stop, button_format
+
     def start(self):
         try:
             self.window.start_callback()
@@ -441,6 +453,13 @@ class SettingFrame(tk.Frame):
     def stop(self):
         try:
             self.window.stop_callback()
+            return
+        except:
+            return
+
+    def gmail(self):
+        try:
+            self.window.format_callback()
             return
         except:
             return

@@ -161,6 +161,7 @@ class Bot:
                 DELAY = random.randint(10, 30) / 10.0
                 ########
                 # driver.get("https://bot.sannysoft.com/")
+                # driver.get("https://iphey.com/")
                 ##########
                 time.sleep(DELAY)
                 WebDriverWait(driver, WAIT).until(
@@ -707,14 +708,6 @@ class Bot:
                         )
                     ).click()
                     time.sleep(DELAY)
-                    # WebDriverWait(driver, WAIT).until(
-                    #     EC.presence_of_element_located(
-                    #         (
-                    #             By.XPATH,
-                    #             "//div[contains(text(),'Đăng nhập và khôi phục')]",
-                    #         )
-                    #     )
-                    # ).click()
                     for element in elements:
                         if "Đăng nhập và khôi phục" in element.text:
                             element.click()
@@ -731,7 +724,7 @@ class Bot:
                     time.sleep(DELAY)
                     element_password = WebDriverWait(driver, WAIT).until(
                         EC.presence_of_element_located(
-                            (By.XPATH, "//*[@type='password']")
+                            (By.XPATH, "//input[@type='password']")
                         )
                     )
                     for char in account.password:
@@ -748,7 +741,9 @@ class Bot:
                     ).click()
                     time.sleep(DELAY)
                     element_email = WebDriverWait(driver, WAIT).until(
-                        EC.presence_of_element_located((By.XPATH, "//*[@type='email']"))
+                        EC.presence_of_element_located(
+                            (By.XPATH, "//input[@type='email']")
+                        )
                     )
                     for char in account.recoveryEmail:
                         element_email.send_keys(char)
@@ -790,7 +785,8 @@ class Bot:
                     f"Luồng {index}: Đã tạo tài khoản thành công",
                     SUCCESS,
                 )
-                time.sleep(10)
+                time.sleep(5)
+                driver.quit()
             except Exception as e:
                 traceback.print_exc()
                 if driver is not None:

@@ -4,6 +4,7 @@ from file_paths import FilePaths
 from views.home_frame import HomeFrame
 from views.setting_frame import SettingFrame
 from views.bottom_frame import BottomFrame
+from views.format_frame import FormatFrame
 from config import LoadConfig
 import config as config
 from bot.bot import Bot
@@ -59,7 +60,6 @@ class MainWindow:
             self.bot.update_error_event = self.UpdateError
             self.bot.update_success_event = self.frame_bottom.UpdateSuccess
             self.bot.Start()
-            print("start_callback")
             return
         except:
             return
@@ -68,7 +68,13 @@ class MainWindow:
         try:
             if self.bot is not None:
                 self.bot.Stop()
-            print("stop_callback")
+            return
+        except:
+            return
+
+    def format_callback(self):
+        try:
+            FormatFrame()
             return
         except:
             return
