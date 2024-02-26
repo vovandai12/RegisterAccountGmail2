@@ -52,7 +52,6 @@ class SettingFrame(tk.Frame):
         value_keyProxy = config.global_config.keyProxy
         text_key = tk.Text(lb, borderwidth=1, relief="solid")
         text_key.delete("1.0", "end")
-        text_key.delete("1.0", "end")
         if not value_keyProxy is None:
             for item in value_keyProxy:
                 text_key.insert("1.0", item + "\n")

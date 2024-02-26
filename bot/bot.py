@@ -211,152 +211,9 @@ class Bot:
                         )
                     )
                 ).click()
-                self.update_account_event(
-                    f"{account.username}@gmail.com",
-                    account.password,
-                    f"Luồng {index}: Nhập họ: {account.firstName} và tên {account.lastName}",
-                    RUN,
-                )
-                time.sleep(DELAY)
-                element_lastName = WebDriverWait(driver, WAIT).until(
-                    EC.presence_of_element_located((By.XPATH, "//*[@name='lastName']"))
-                )
-                for char in account.lastName:
-                    element_lastName.send_keys(char)
-                    time.sleep(0.1 + 0.1 * random.random())
-                element_lastName.send_keys(Keys.ENTER)
-                element_firstName = WebDriverWait(driver, WAIT).until(
-                    EC.presence_of_element_located((By.XPATH, "//*[@name='firstName']"))
-                )
-                for char in account.firstName:
-                    element_firstName.send_keys(char)
-                    time.sleep(0.1 + 0.1 * random.random())
-                element_firstName.send_keys(Keys.ENTER)
-                gender_string = "nữ"
-                if account.gender == 2:
-                    gender_string = "nam"
-                self.update_account_event(
-                    f"{account.username}@gmail.com",
-                    account.password,
-                    f"Luồng {index}: Nhập ngày sinh: {account.birthDay} và giới tính {gender_string}",
-                    RUN,
-                )
-                time.sleep(DELAY)
-                element_day = WebDriverWait(driver, WAIT).until(
-                    EC.presence_of_element_located((By.XPATH, '//input[@name="day"]'))
-                )
-                element_day.click()
-                for char in account.birthDay.split("/")[0]:
-                    element_day.send_keys(char)
-                    time.sleep(0.1 + 0.1 * random.random())
-                time.sleep(DELAY)
-                element_month = WebDriverWait(driver, WAIT).until(
-                    EC.presence_of_element_located((By.XPATH, '//select[@id="month"]'))
-                )
-                element_month.click()
-                for _ in range(1, int(account.birthDay.split("/")[1]) + 1):
-                    element_month.send_keys(Keys.ARROW_DOWN)
-                    time.sleep(0.1 + 0.1 * random.random())
-                element_month.send_keys(Keys.ENTER)
-                time.sleep(DELAY)
-                element_year = WebDriverWait(driver, WAIT).until(
-                    EC.presence_of_element_located((By.XPATH, '//input[@name="year"]'))
-                )
-                element_year.click()
-                for char in account.birthDay.split("/")[2]:
-                    element_year.send_keys(char)
-                    time.sleep(0.1 + 0.1 * random.random())
-                time.sleep(DELAY)
-                element_gender = WebDriverWait(driver, WAIT).until(
-                    EC.presence_of_element_located((By.XPATH, '//select[@id="gender"]'))
-                )
-                element_gender.click()
-                for _ in range(1, account.gender + 1):
-                    element_gender.send_keys(Keys.ARROW_DOWN)
-                    time.sleep(0.1 + 0.1 * random.random())
-                element_gender.send_keys(Keys.ENTER)
-                time.sleep(DELAY)
-                WebDriverWait(driver, WAIT).until(
-                    EC.presence_of_element_located(
-                        (
-                            By.XPATH,
-                            "//button[@class='VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-k8QpJ VfPpkd-LgbsSe-OWXEXe-dgl2Hf nCP5yc AjY5Oe DuMIQc LQeN7 qIypjc TrZEUc lw1w4b']",
-                        )
-                    )
-                ).click()
-                time.sleep(DELAY)
-                try:
-                    WebDriverWait(driver, 2).until(
-                        EC.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                "//button[contains(text(),'Thay vào đó hãy lấy địa chỉ Gmail')]",
-                            )
-                        )
-                    ).click()
-                except:
-                    pass
-                time.sleep(DELAY)
-                try:
-                    WebDriverWait(driver, 2).until(
-                        EC.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                "//div[contains(text(),'Tạo địa chỉ Gmail của riêng bạn')]",
-                            )
-                        )
-                    ).click()
-                except:
-                    pass
-                self.update_account_event(
-                    f"{account.username}@gmail.com",
-                    account.password,
-                    f"Luồng {index}: Nhập tên người dùng: {account.username}",
-                    RUN,
-                )
-                time.sleep(DELAY)
-                element_username = WebDriverWait(driver, WAIT).until(
-                    EC.presence_of_element_located((By.XPATH, "//*[@name='Username']"))
-                )
-                element_username.click()
-                for char in account.username:
-                    element_username.send_keys(char)
-                    time.sleep(0.1 + 0.1 * random.random())
-                element_username.send_keys(Keys.ENTER)
-                self.update_account_event(
-                    f"{account.username}@gmail.com",
-                    account.password,
-                    f"Luồng {index}: Nhập mật khẩu: {account.password}",
-                    RUN,
-                )
-                time.sleep(DELAY)
-                element_passwd = WebDriverWait(driver, WAIT).until(
-                    EC.presence_of_element_located((By.XPATH, "//*[@name='Passwd']"))
-                )
-                for char in account.password:
-                    element_passwd.send_keys(char)
-                    time.sleep(0.1 + 0.1 * random.random())
-                element_passwd.send_keys(Keys.ENTER)
-                time.sleep(DELAY)
-                element_passwd_again = WebDriverWait(driver, WAIT).until(
-                    EC.presence_of_element_located(
-                        (By.XPATH, "//*[@name='PasswdAgain']")
-                    )
-                )
-                for char in account.password:
-                    element_passwd_again.send_keys(char)
-                    time.sleep(0.1 + 0.1 * random.random())
-                element_passwd_again.send_keys(Keys.ENTER)
-                try:
-                    check_error = WebDriverWait(driver, 5).until(
-                        EC.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                "//div[contains(text(),'Rất tiếc, chúng tôi không thể tạo Tài khoản Google cho bạn.')]",
-                            )
-                        )
-                    )
-                    if check_error:
+                check_data = 1
+                while check_data <= 3:
+                    if check_data == 3:
                         driver.quit()
                         totail_error += 1
                         self.update_account_event(
@@ -368,8 +225,181 @@ class Bot:
                         self.update_error_event(totail_error)
                         self.update_success_event(totail_success)
                         continue
-                except:
-                    pass
+                    self.update_account_event(
+                        f"{account.username}@gmail.com",
+                        account.password,
+                        f"Luồng {index}: Nhập họ: {account.firstName} và tên {account.lastName}",
+                        RUN,
+                    )
+                    time.sleep(DELAY)
+                    element_lastName = WebDriverWait(driver, WAIT).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH, "//*[@name='lastName']")
+                        )
+                    )
+                    for char in account.lastName:
+                        element_lastName.send_keys(char)
+                        time.sleep(0.1 + 0.1 * random.random())
+                    element_lastName.send_keys(Keys.ENTER)
+                    element_firstName = WebDriverWait(driver, WAIT).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH, "//*[@name='firstName']")
+                        )
+                    )
+                    for char in account.firstName:
+                        element_firstName.send_keys(char)
+                        time.sleep(0.1 + 0.1 * random.random())
+                    element_firstName.send_keys(Keys.ENTER)
+                    gender_string = "nữ"
+                    if account.gender == 2:
+                        gender_string = "nam"
+                    self.update_account_event(
+                        f"{account.username}@gmail.com",
+                        account.password,
+                        f"Luồng {index}: Nhập ngày sinh: {account.birthDay} và giới tính {gender_string}",
+                        RUN,
+                    )
+                    time.sleep(DELAY)
+                    element_day = WebDriverWait(driver, WAIT).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH, '//input[@name="day"]')
+                        )
+                    )
+                    element_day.click()
+                    for char in account.birthDay.split("/")[0]:
+                        element_day.send_keys(char)
+                        time.sleep(0.1 + 0.1 * random.random())
+                    time.sleep(DELAY)
+                    element_month = WebDriverWait(driver, WAIT).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH, '//select[@id="month"]')
+                        )
+                    )
+                    element_month.click()
+                    for _ in range(1, int(account.birthDay.split("/")[1]) + 1):
+                        element_month.send_keys(Keys.ARROW_DOWN)
+                        time.sleep(0.1 + 0.1 * random.random())
+                    element_month.send_keys(Keys.ENTER)
+                    time.sleep(DELAY)
+                    element_year = WebDriverWait(driver, WAIT).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH, '//input[@name="year"]')
+                        )
+                    )
+                    element_year.click()
+                    for char in account.birthDay.split("/")[2]:
+                        element_year.send_keys(char)
+                        time.sleep(0.1 + 0.1 * random.random())
+                    time.sleep(DELAY)
+                    element_gender = WebDriverWait(driver, WAIT).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH, '//select[@id="gender"]')
+                        )
+                    )
+                    element_gender.click()
+                    for _ in range(1, account.gender + 1):
+                        element_gender.send_keys(Keys.ARROW_DOWN)
+                        time.sleep(0.1 + 0.1 * random.random())
+                    element_gender.send_keys(Keys.ENTER)
+                    time.sleep(DELAY)
+                    WebDriverWait(driver, WAIT).until(
+                        EC.presence_of_element_located(
+                            (
+                                By.XPATH,
+                                "//button[@class='VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-k8QpJ VfPpkd-LgbsSe-OWXEXe-dgl2Hf nCP5yc AjY5Oe DuMIQc LQeN7 qIypjc TrZEUc lw1w4b']",
+                            )
+                        )
+                    ).click()
+                    time.sleep(DELAY)
+                    try:
+                        WebDriverWait(driver, 2).until(
+                            EC.presence_of_element_located(
+                                (
+                                    By.XPATH,
+                                    "//button[contains(text(),'Thay vào đó hãy lấy địa chỉ Gmail')]",
+                                )
+                            )
+                        ).click()
+                    except:
+                        pass
+                    time.sleep(DELAY)
+                    try:
+                        WebDriverWait(driver, 2).until(
+                            EC.presence_of_element_located(
+                                (
+                                    By.XPATH,
+                                    "//div[contains(text(),'Tạo địa chỉ Gmail của riêng bạn')]",
+                                )
+                            )
+                        ).click()
+                    except:
+                        pass
+                    self.update_account_event(
+                        f"{account.username}@gmail.com",
+                        account.password,
+                        f"Luồng {index}: Nhập tên người dùng: {account.username}",
+                        RUN,
+                    )
+                    time.sleep(DELAY)
+                    element_username = WebDriverWait(driver, WAIT).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH, "//*[@name='Username']")
+                        )
+                    )
+                    element_username.click()
+                    for char in account.username:
+                        element_username.send_keys(char)
+                        time.sleep(0.1 + 0.1 * random.random())
+                    element_username.send_keys(Keys.ENTER)
+                    self.update_account_event(
+                        f"{account.username}@gmail.com",
+                        account.password,
+                        f"Luồng {index}: Nhập mật khẩu: {account.password}",
+                        RUN,
+                    )
+                    time.sleep(DELAY)
+                    element_passwd = WebDriverWait(driver, WAIT).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH, "//*[@name='Passwd']")
+                        )
+                    )
+                    for char in account.password:
+                        element_passwd.send_keys(char)
+                        time.sleep(0.1 + 0.1 * random.random())
+                    element_passwd.send_keys(Keys.ENTER)
+                    time.sleep(DELAY)
+                    element_passwd_again = WebDriverWait(driver, WAIT).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH, "//*[@name='PasswdAgain']")
+                        )
+                    )
+                    for char in account.password:
+                        element_passwd_again.send_keys(char)
+                        time.sleep(0.1 + 0.1 * random.random())
+                    element_passwd_again.send_keys(Keys.ENTER)
+                    try:
+                        check_error = WebDriverWait(driver, 10).until(
+                            EC.presence_of_element_located(
+                                (
+                                    By.XPATH,
+                                    "//div[contains(text(),'Rất tiếc, chúng tôi không thể tạo Tài khoản Google cho bạn.')]",
+                                )
+                            )
+                        )
+                        if check_error:
+                            WebDriverWait(driver, WAIT).until(
+                                EC.presence_of_element_located(
+                                    (
+                                        By.XPATH,
+                                        "//button[@class='VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-k8QpJ VfPpkd-LgbsSe-OWXEXe-dgl2Hf nCP5yc AjY5Oe DuMIQc LQeN7 qIypjc TrZEUc lw1w4b']",
+                                    )
+                                )
+                            ).click()
+                            check_data += 1
+                        else:
+                            break
+                    except:
+                        break
                 time.sleep(DELAY)
                 check_phone = 1
                 while check_phone <= 9:
@@ -795,7 +825,7 @@ class Bot:
                     f"Luồng {index}: Đã tạo tài khoản thành công",
                     SUCCESS,
                 )
-                time.sleep(5)
+                time.sleep(10)
                 driver.quit()
             except Exception as e:
                 traceback.print_exc()
