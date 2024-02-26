@@ -128,26 +128,31 @@ class Bot:
                     "profile.password_manager_enabled": False,
                     "credentials_enable_service": False,
                     "useAutomationExtension": False,
+                    "profile.default_content_setting_values.geolocation": 1,
                 }
                 options.add_experimental_option("prefs", prefs)
                 user_agent = ServiceBot.getRandomeUserAgent()
                 if user_agent is None:
                     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
+                # user_agent = UserAgent().random
                 options.add_argument(f"user-agent={user_agent}")
+                options.add_experimental_option(
+                    "prefs", {"profile.default_content_setting_values.geolocation": 1}
+                )
                 print(f"user_agent->{user_agent}")
                 driver = webdriver.Chrome(
                     service=Service(ChromeDriverManager().install()), options=options
                 )
-                # stealth(
-                #     driver,
-                #     user_agent=user_agent,
-                #     languages=["vi-VN", "vi", "fr-FR", "fr", "en-US", "en"],
-                #     vendor="Google Inc.",
-                #     platform="Win32",
-                #     webgl_vendor="Intel Inc.",
-                #     renderer="Intel Iris OpenGL Engine",
-                #     fix_hairline=True,
-                # )
+                stealth(
+                    driver,
+                    user_agent=user_agent,
+                    languages=["vi-VN", "vi", "fr-FR", "fr", "en-US", "en"],
+                    vendor="Google Inc.",
+                    platform="Win32",
+                    webgl_vendor="Intel Inc.",
+                    renderer="Intel Iris OpenGL Engine",
+                    fix_hairline=True,
+                )
                 driver.execute_script(
                     "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
                 )
@@ -160,6 +165,7 @@ class Bot:
                 WAIT = random.randint(15, 30)
                 DELAY = random.randint(10, 30) / 10.0
                 ########
+                # driver.get("https://infosimples.github.io/detect-headless/")
                 # driver.get("https://bot.sannysoft.com/")
                 # driver.get("https://iphey.com/")
                 ##########
@@ -550,6 +556,8 @@ class Bot:
                         title == f"Hộp thư đến - {account.username}@gmail.com - Gmail"
                         or title
                         == f"Hộp thư đến (1) - {account.username}@gmail.com - Gmail"
+                        or title == f"Inbox - {account.username}@gmail.com - Gmail"
+                        or title == f"Inbox (1) - {account.username}@gmail.com - Gmail"
                     ):
                         break
                     check_title += 1
@@ -656,6 +664,8 @@ class Bot:
                         title == f"Hộp thư đến - {account.username}@gmail.com - Gmail"
                         or title
                         == f"Hộp thư đến (1) - {account.username}@gmail.com - Gmail"
+                        or title == f"Inbox (1) - {account.username}@gmail.com - Gmail"
+                        or title == f"Inbox - {account.username}@gmail.com - Gmail"
                     ):
                         break
                     check_title += 1
@@ -805,137 +815,3 @@ class Bot:
             if totail_success >= number_acc:
                 self.stop_event.set()
                 break
-
-
-####### Đọc chat ban đầu
-# try:
-#     time.sleep(DELAY)
-#     driver.set_window_size(800, 800)
-#     time.sleep(DELAY)
-#     WebDriverWait(driver, WAIT).until(
-#         EC.presence_of_element_located(
-#             (
-#                 By.XPATH,
-#                 "//span[@email='googlecommunityteam-noreply@google.com']",
-#             )
-#         )
-#     ).click()
-#     time.sleep(random.randint(30, 80) / 10.0)
-#     WebDriverWait(driver, WAIT).until(
-#         EC.presence_of_element_located(
-#             (
-#                 By.XPATH,
-#                 "//div[@class='ar6 T-I-J3 J-J5-Ji']",
-#             )
-#         )
-#     ).click()
-#     time.sleep(DELAY)
-#     driver.set_window_size(800, 600)
-# except:
-#     time.sleep(DELAY)
-#     driver.set_window_size(800, 600)
-####### Gửi thư ngẫu nhiên
-# try:
-#     time.sleep(DELAY)
-#     WebDriverWait(driver, WAIT).until(
-#         EC.presence_of_element_located(
-#             (
-#                 By.XPATH,
-#                 "//div[@class='T-I T-I-KE L3']",
-#             )
-#         )
-#     ).click()
-#     to_email = "vodai109@gmail.com"
-#     subject_email = "Đây là tiêu đề email"
-#     content = "Đây là nội dung email"
-#     time.sleep(DELAY)
-#     element_to = WebDriverWait(driver, WAIT).until(
-#         EC.presence_of_element_located(
-#             (
-#                 By.XPATH,
-#                 "//div[@class='nH Hd']//span[@email='googlecommunityteam-noreply@google.com']",
-#             )
-#         )
-#     )
-## <input id=":10q" class="agP aFw" peoplekit-id="BbVjBd" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Tới người nhận" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" placeholder="" size="0" type="text" role="combobox" aria-owns=":10r" aria-controls=":10r">
-## <input name="subjectbox" id=":x4" class="aoT" autocomplete="off" spellcheck="true" tabindex="1" placeholder="Tiêu đề" aria-label="Tiêu đề">
-## <div id=":ye" class="Am aiL Al editable LW-avf tS-tW" hidefocus="true" aria-label="Nội dung thư" g_editable="true" role="textbox" aria-multiline="true" contenteditable="true" tabindex="1" style="direction: ltr; min-height: 256px;" spellcheck="false" aria-owns=":10s" aria-controls=":10s" aria-expanded="false"><br></div>
-## <div id=":kj" class="T-I J-J5-Ji aoO v7 T-I-atl L3" role="button" tabindex="1" data-tooltip="Gửi &#x202A;(Ctrl-Enter)&#x202C;" aria-label="Gửi &#x202A;(Ctrl-Enter)&#x202C;" data-tooltip-delay="800" jslog="32601; u014N:xr6bB,cOuCgd,Kr2w4b; dYFj7e:true; 11:WyIjbXNnLWE6cjcyNjQxMzEzMjczNjc2NjcyMTIiLG51bGwsbnVsbCxudWxsLDEsbnVsbCxbIiN0aHJlYWQtYTpyLTEwNTU4MDkwMjExOTMyMDU3NTYiXSwwLG51bGwsbnVsbCwwLG51bGwsbnVsbCwwXQ..; 4:W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsMCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCwwXQ.." style="user-select: none;">Gửi</div>
-# except:
-#     traceback.print_exc()
-#     pass
-####### Tạo kênh youtube
-# check_youtube = False
-# try:
-#     driver.get("https://www.youtube.com")
-#     check_error = None
-#     try:
-#         check_error = WebDriverWait(driver, 5).until(
-#             EC.presence_of_element_located(
-#                 (
-#                     By.XPATH,
-#                     "//div[@class='Đã xảy ra lỗi trong khi cố gắng tạo tài khoản YouTube, vui lòng thử lại sau.']",
-#                 )
-#             )
-#         )
-#     except:
-#         pass
-#     if check_error is None:
-#         check_title = 1
-#         while check_title < 30:
-#             title = driver.title
-#             if title == f"Youtube":
-#                 break
-#             check_title += 1
-#             time.sleep(2)
-#         time.sleep(DELAY)
-#         WebDriverWait(driver, WAIT).until(
-#             EC.presence_of_element_located(
-#                 (
-#                     By.XPATH,
-#                     "//button[@id='avatar-btn']",
-#                 )
-#             )
-#         ).click()
-#         time.sleep(DELAY)
-#         WebDriverWait(driver, WAIT).until(
-#             EC.presence_of_element_located(
-#                 (
-#                     By.XPATH,
-#                     "//a[contains(text(),'Tạo kênh')]",
-#                 )
-#             )
-#         ).click()
-#         time.sleep(DELAY)
-#         WebDriverWait(driver, WAIT).until(
-#             EC.presence_of_element_located(
-#                 (
-#                     By.XPATH,
-#                     "//button[@class='yt-spec-button-shape-next yt-spec-button-shape-next--tonal yt-spec-button-shape-next--mono yt-spec-button-shape-next--size-m']",
-#                 )
-#             )
-#         ).click()
-#         ####### chờ 10s tải lại trang
-#         title = driver.title
-#         current_url = driver.current_url
-#         print(title)
-#         print(current_url)
-#         check_youtube = True
-# except:
-#     traceback.print_exc()
-#     check_youtube = False
-#     pass
-# if check_youtube:
-#     self.update_account_event(
-#         f"{account.username}@gmail.com",
-#         account.password,
-#         f"Luồng {index}:Tạo kênh youtube thành công",
-#         RUN,
-#     )
-# else:
-#     self.update_account_event(
-#         f"{account.username}@gmail.com",
-#         account.password,
-#         f"Luồng {index}:Tạo kênh youtube thất bại",
-#         ERROR,
-#     )
