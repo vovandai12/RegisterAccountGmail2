@@ -9,12 +9,14 @@ NONE = "none"
 TMPROXY = "https://tmproxy.com"
 PROXYSHOPLIKE = "https://proxy.shoplike.vn"
 PROXYFB = "https://proxyfb.com"
+WWPROXY = "https://wwproxy.com"
 
 BOSSOTP = "https://bossotp.com"
 IRONSIM = "https://ironsim.com"
 VIOTP = "https://viotp.com"
 SIMOTP = "https://simotp.net"
 HCOTP = "https://hcotp.com"
+CHAYCODESO3 = "https://chaycodeso3.com"
 
 
 def LoadConfig():

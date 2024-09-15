@@ -7,16 +7,7 @@ import unidecode
 import config as config
 from file_paths import FilePaths
 from models.model import Account
-from config import (
-    TMPROXY,
-    PROXYSHOPLIKE,
-    PROXYFB,
-    BOSSOTP,
-    IRONSIM,
-    VIOTP,
-    SIMOTP,
-    HCOTP,
-)
+from config import *
 import bot.tmproxy as Tmproxy
 import bot.proxyshoplike as Proxyshoplike
 import bot.proxyfb as Proxyfb
@@ -25,6 +16,8 @@ import bot.bossotp as Bossotp
 import bot.viotp as Viotp
 import bot.simotp as Simotp
 import bot.hcotp as Hcotp
+import bot.wwproxy as Wwproxy
+import bot.chaycodeso3 as Chaycodeso3
 import re
 
 
@@ -166,6 +159,11 @@ def generateProxy():
                     if by_proxy:
                         proxy = by_proxy.proxy
                         break
+                elif value == WWPROXY:
+                    by_proxy = Wwproxy.get_proxy(item)
+                    if by_proxy:
+                        proxy = by_proxy.proxy
+                        break
             if proxy is not None:
                 return proxy
         return proxy
@@ -184,9 +182,7 @@ def generatePhone():
                 buy_phone = Bossotp.buy_phone_number(key)
                 if buy_phone:
                     id_phone = buy_phone.rent_id
-                    numeric_str = "".join(filter(str.isdigit, buy_phone.number))
-                    result_str = "0" + numeric_str[1:]
-                    phone = result_str
+                    phone = "0" + buy_phone.number
             elif value == IRONSIM:
                 buy_phone = Ironsim.buy_phone_number(key, 16)
                 if buy_phone:
@@ -207,6 +203,11 @@ def generatePhone():
                 if buy_phone:
                     phone = buy_phone.phoneNum
                     id_phone = buy_phone.id
+            elif value == CHAYCODESO3:
+                buy_phone = Chaycodeso3.buy_phone_number(key)
+                if buy_phone:
+                    phone = "0" + buy_phone.Number
+                    id_phone = buy_phone.Id
         return phone, id_phone
     except Exception as e:
         return None, None
@@ -248,6 +249,11 @@ def generateCode(id_phone):
                 if hcotp:
                     if hcotp.code:
                         code = hcotp.code
+            elif value == CHAYCODESO3:
+                buycode = Chaycodeso3.get_otp(key, id_phone)
+                if buycode:
+                    if buycode.Code:
+                        code = buycode.Code
         return code
     except Exception as e:
         return None

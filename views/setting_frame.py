@@ -1,14 +1,5 @@
 import tkinter as tk
-from config import (
-    TMPROXY,
-    PROXYSHOPLIKE,
-    PROXYFB,
-    BOSSOTP,
-    IRONSIM,
-    VIOTP,
-    SIMOTP,
-    HCOTP,
-)
+from config import *
 import config as config
 from config import WriteConfig
 
@@ -33,7 +24,7 @@ class SettingFrame(tk.Frame):
     def Lb_proxy(self):
         lb = tk.LabelFrame(self, text="Proxy", bg="white")
         lba_proxy = tk.Label(lb, text="Dịch vụ proxy:", bg="white")
-        options_proxy = [TMPROXY, PROXYSHOPLIKE, PROXYFB]
+        options_proxy = [TMPROXY, PROXYSHOPLIKE, PROXYFB, WWPROXY]
         variable_proxy = tk.StringVar()
         variable_proxy.set(config.global_config.methodProxy)
 
@@ -72,7 +63,7 @@ class SettingFrame(tk.Frame):
     def Lb_otp(self):
         lb = tk.LabelFrame(self, text="Số điện thoại", bg="white")
         lba_otp = tk.Label(lb, text="Dịch vụ otp:", bg="white")
-        options_otp = [BOSSOTP, IRONSIM, VIOTP, SIMOTP, HCOTP]
+        options_otp = [BOSSOTP, IRONSIM, VIOTP, SIMOTP, HCOTP, CHAYCODESO3]
         variable_otp = tk.StringVar()
         variable_otp.set(config.global_config.methodOtp)
 

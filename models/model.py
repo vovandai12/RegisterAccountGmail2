@@ -1,6 +1,28 @@
 from datetime import datetime
 
 
+class Profile:
+    def __init__(self, data=None):
+        self.id = data.get("id", None)
+        self.name = data.get("name", None)
+        self.raw_proxy = data.get("raw_proxy", None)
+        self.browser_type = data.get("browser_type", None)
+        self.browser_version = data.get("browser_version", None)
+        self.group_id = data.get("group_id", None)
+        self.profile_path = data.get("profile_path", None)
+        self.note = data.get("note", None)
+        self.created_at = data.get("created_at", None)
+
+
+class ProfileRun:
+    def __init__(self, data=None):
+        self.profile_id = data.get("profile_id", None)
+        self.browser_location = data.get("browser_location", None)
+        self.remote_debugging_address = data.get("remote_debugging_address", None)
+        self.driver_path = data.get("driver_path", None)
+        self.process_id = data.get("process_id", None)
+
+
 class Account:
     def __init__(
         self,
@@ -125,7 +147,7 @@ class Simotp:
             self.content = data.get("content", None)
             self.status = data.get("status", None)
             self.createdAt = data.get("createdAt", None)
-            
+
 
 class Hcotp:
     def __init__(self, data=None):
@@ -146,3 +168,27 @@ class Hcotp:
             self.userName = data.get("userName", None)
             self.responseTime = data.get("responseTime", None)
             self.guidId = data.get("guidId", None)
+
+
+class Wwproxy:
+    def __init__(self, data=None):
+        if data is not None:
+            self.ipAddress = data.get("ipAddress", None)
+            self.port = data.get("port", None)
+            self.proxy = data.get("proxy", None)
+            self.vip = data.get("vip", None)
+            self.expiredTime = data.get("expiredTime", None)
+            self.status = data.get("status", None)
+            self.provinceId = data.get("provinceId", None)
+            self.nextChange = data.get("nextChange", None)
+
+
+class Chaycodeso3:
+    def __init__(self, data=None):
+        self.Id = data.get("Id", None)
+        self.Number = data.get("Number", None)
+        self.App = data.get("App", None)
+        self.Cost = data.get("Cost", None)
+        self.Balance = data.get("Balance", None)
+        self.SMS = data.get("SMS", None)
+        self.Code = data.get("Code", None)

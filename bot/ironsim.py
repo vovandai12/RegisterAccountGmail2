@@ -1,7 +1,5 @@
-import requests
-import json
-import time
 from models.model import Ironsim
+import requests, json
 
 
 def buy_phone_number(key, service):
@@ -13,7 +11,6 @@ def buy_phone_number(key, service):
             key, service
         )
         response = requests.request("GET", url)
-        time.sleep(1)
         result = json.loads(response.text)
         if result:
             if result["status_code"] == 200:
@@ -30,7 +27,6 @@ def get_otp(key, id_phone):
             id_phone, key
         )
         response = requests.request("GET", url)
-        time.sleep(1)
         result = json.loads(response.text)
         print(result)
         if result:
